@@ -1,0 +1,12 @@
+group 'quiz'
+
+apply plugin: 'war'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile 'javax:javaee-api:+'
+    runtime 'mysql:mysql-connector-java:+'
+}
