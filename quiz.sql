@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.16, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.17, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: quiz
+-- Host: localhost    Database: quiz
 -- ------------------------------------------------------
--- Server version	5.7.16-0ubuntu0.16.04.1
+-- Server version	5.7.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,8 +25,8 @@ DROP TABLE IF EXISTS `questions`;
 CREATE TABLE `questions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `question` varchar(200) DEFAULT NULL,
-  `correct_answer` varchar(50) DEFAULT NULL,
-  `wrong_answer` varchar(50) DEFAULT NULL,
+  `correctAnswer` varchar(50) DEFAULT NULL,
+  `wrongAnswer` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -50,11 +50,7 @@ DROP TABLE IF EXISTS `test_question`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_question` (
   `test_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL,
-  KEY `test_question_test_fk` (`test_id`),
-  KEY `test_question_question_fk` (`question_id`),
-  CONSTRAINT `test_question_question_fk` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`),
-  CONSTRAINT `test_question_test_fk` FOREIGN KEY (`test_id`) REFERENCES `tests` (`id`)
+  `question_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -133,7 +129,7 @@ CREATE TABLE `users` (
   `email` varchar(50) DEFAULT NULL,
   `age` int(11) DEFAULT NULL,
   `hometown` varchar(50) DEFAULT NULL,
-  `user_name` varchar(50) DEFAULT NULL,
+  `userName` varchar(50) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
@@ -158,4 +154,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-12-22  1:14:44
+-- Dump completed on 2017-01-04  0:21:16
