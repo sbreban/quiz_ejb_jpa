@@ -1,8 +1,9 @@
 package servlet;
 
 import model.Question;
-import persistence.DatabaseUtil;
+import stateless.QuestionService;
 
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +18,10 @@ import java.util.List;
  * Created by Sergiu on 19.01.2016.
  */
 public class QuestionServlet extends HttpServlet {
+
+  @EJB
+  QuestionService questionService;
+
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     resp.setContentType("text/html");
@@ -35,8 +40,8 @@ public class QuestionServlet extends HttpServlet {
 
     List<Question> questionList = new ArrayList<>();
     try {
-      questionList = DatabaseUtil.getQuestions(testId);
-      out.println("<form action=\""+context+"\" method=\"post\">");
+      questionList = questionService.getQuestions(testId);
+      out.println("<form action=\"" + context + "\" method=\"post\">");
       for (int i = 0; i < questionList.size(); i++) {
         Question question = questionList.get(i);
         out.println("<p><input type=\"text\" name=\"question" + i + "\" width=\"20\" value=\"" + question.getId() + "\"/>");
@@ -69,7 +74,7 @@ public class QuestionServlet extends HttpServlet {
         String questionIdString = req.getParameter("question" + i);
         int questionId = Integer.parseInt(questionIdString);
         String answer = req.getParameter("answer" + i);
-        boolean correct = DatabaseUtil.checkAnswer(questionId, answer);
+        boolean correct = questionService.checkAnswer(questionId, answer);
         allCorrect = allCorrect && correct;
       }
     } catch (Exception e) {

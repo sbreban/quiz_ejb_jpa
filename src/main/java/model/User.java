@@ -1,19 +1,35 @@
 package model;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
+
 /**
  * Created by sbreban on 12/14/16.
  */
-public class User {
-  private int id;
-  private String name;
-  private String password;
-  private String tests;
+@Entity
+@Table(name = "users")
+public class User implements Serializable {
 
-  public User(int id, String name, String password, String tests) {
+  @Id
+  @GeneratedValue
+  private int id;
+  private String userName;
+  private String password;
+
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name="user_test",
+      joinColumns=@JoinColumn(name="user_id"),
+      inverseJoinColumns=@JoinColumn(name="test_id"))
+  private Collection<Test> tests;
+
+  public User() {
+  }
+
+  public User(int id, String userName, String password) {
     this.id = id;
-    this.name = name;
+    this.userName = userName;
     this.password = password;
-    this.tests = tests;
   }
 
   public int getId() {
@@ -24,12 +40,12 @@ public class User {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getUserName() {
+    return userName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setUserName(String name) {
+    this.userName = name;
   }
 
   public String getPassword() {
@@ -40,11 +56,16 @@ public class User {
     this.password = password;
   }
 
-  public String getTests() {
-    return tests;
+  public void addTest(Test test) {
+    if (!getTests().contains(test)) {
+      getTests().add(test);
+    }
+    if (!test.getUsers().contains(this)) {
+      test.getUsers().add(this);
+    }
   }
 
-  public void setTests(String tests) {
-    this.tests = tests;
+  public Collection<Test> getTests() {
+    return tests;
   }
 }

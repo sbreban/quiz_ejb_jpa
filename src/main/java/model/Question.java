@@ -1,13 +1,27 @@
 package model;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
+
 /**
  * Created by sbreban on 12/14/16.
  */
-public class Question {
+@Entity
+@Table(name = "questions")
+public class Question implements Serializable {
+  @Id
+  @GeneratedValue
   private int id;
   private String question;
   private String wrongAnswer;
   private String correctAnswer;
+
+  @ManyToMany(mappedBy="questions")
+  private Collection<Test> tests;
+
+  public Question() {
+  }
 
   public Question(int id, String question, String wrongAnswer, String correctAnswer) {
     this.id = id;
@@ -46,5 +60,18 @@ public class Question {
 
   public void setCorrectAnswer(String correctAnswer) {
     this.correctAnswer = correctAnswer;
+  }
+
+  public Collection<Test> getTests() {
+    return tests;
+  }
+
+  public void addTest(Test test) {
+    if (!getTests().contains(test)) {
+      getTests().add(test);
+    }
+    if (!test.getQuestions().contains(this)) {
+      test.getQuestions().add(this);
+    }
   }
 }

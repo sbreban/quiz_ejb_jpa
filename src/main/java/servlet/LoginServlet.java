@@ -1,8 +1,10 @@
 package servlet;
 
+import model.Test;
 import model.User;
-import persistence.DatabaseUtil;
+import stateless.UserService;
 
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class LoginServlet extends HttpServlet {
+
+  @EJB
+  UserService userService;
 
   public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
     doPost(req, res);
@@ -23,12 +28,19 @@ public class LoginServlet extends HttpServlet {
     String password = req.getParameter("password");
 
     try {
-      User user = DatabaseUtil.getUser(login, password);
+      User user = userService.getUser(login, password);
       if (user != null) {
         HttpSession session = req.getSession();
         session.setAttribute("user", login);
         session.setMaxInactiveInterval(60);
-        int level = DatabaseUtil.getMaxLevel(user.getId());
+        int level = 1;
+        if (user.getTests() != null) {
+          for (Test test : user.getTests()) {
+            if (test.getLevel() > level) {
+              level = test.getLevel();
+            }
+          }
+        }
         session.setAttribute("level", level);
         rd = req.getRequestDispatcher("/loginSuccess.jsp");
       } else {
