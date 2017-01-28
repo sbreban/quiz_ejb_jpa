@@ -28,7 +28,7 @@ CREATE TABLE `questions` (
   `correctAnswer` varchar(50) DEFAULT NULL,
   `wrongAnswer` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `questions` (
 
 LOCK TABLES `questions` WRITE;
 /*!40000 ALTER TABLE `questions` DISABLE KEYS */;
-INSERT INTO `questions` VALUES (1,'cine?','Ciolos','Dragnea');
+INSERT INTO `questions` VALUES (1,'cine?','a','b'),(2,'unde?','c','d'),(3,'când?','e','f');
 /*!40000 ALTER TABLE `questions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,7 +50,11 @@ DROP TABLE IF EXISTS `test_question`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_question` (
   `test_id` int(11) NOT NULL,
-  `question_id` int(11) NOT NULL
+  `question_id` int(11) NOT NULL,
+  KEY `test_question_question_fk` (`question_id`),
+  KEY `test_question_test_fk` (`test_id`),
+  CONSTRAINT `test_question_question_fk` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`),
+  CONSTRAINT `test_question_test_fk` FOREIGN KEY (`test_id`) REFERENCES `tests` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -60,7 +64,7 @@ CREATE TABLE `test_question` (
 
 LOCK TABLES `test_question` WRITE;
 /*!40000 ALTER TABLE `test_question` DISABLE KEYS */;
-INSERT INTO `test_question` VALUES (1,1);
+INSERT INTO `test_question` VALUES (1,1),(1,2),(1,3);
 /*!40000 ALTER TABLE `test_question` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,4 +158,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-04  0:21:16
+-- Dump completed on 2017-01-28 17:41:50
